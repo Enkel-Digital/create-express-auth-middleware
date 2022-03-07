@@ -46,25 +46,19 @@ module.exports = function setup(
 
   /**
    * Apply this middleware to protected routes that require authentication.
-   * This middleware allows all users' requests with valid firebase auth tokens through.
-   * Thus business logics need to handle extra conditions locally. E.g. user can only request for their own data.
+   * This middleware allows all users' requests that passes the predicate through.
+   *
+   * If predicate returns true with the request object, call next middleware as user is authenticated.
+   * Predicate must return true if passes authentication as truthy values are not accepted.
+   *
+   * If predicate failed or an error is thrown, end the request in this middleware.
+   * If an error is thrown, generate error message first before passing in the final string.
    */
-  return async function auth(req, res, next) {
-    try {
-      // If predicate returns true with the given request object,
-      // user is authorized to access resource, thus call next middleware.
-      // Predicate must return true or false, does not accept truthy values in place of true
-      // Break out of this middleware and continue with the next one
-      if ((await predicate(req)) === true) return next();
-
-      // If token missing or token malformed, end the request in this middleware
-      // 401 Missing auth token thus unauthorised
-      authFailed(res, 401, "MISSING OR MALFORMED AUTH");
-    } catch (error) {
-      // If verifyIdToken method threw an error, end the request in this middleware
-      // Generate the error message first before passing in the final string
-      // 403 identity known but denied / failed authentication
-      authFailed(res, 403, errorMessage(error));
-    }
-  };
+  return async (req, res, next) =>
+    predicate(req)
+      .then((result) =>
+        result === true ? next() : authFailed(res, 401, "Authentication Failed")
+      )
+      // 403 identity known but authentication failed or is denied
+      .catch((error) => authFailed(res, 403, errorMessage(error)));
 };
