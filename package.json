@@ -1,0 +1,35 @@
+{
+  "name": "create-express-auth-middleware",
+  "version": "0.1.0",
+  "types": "src/index.d.ts",
+  "files": [
+    "src"
+  ],
+  "description": "Library to create Express JS authentication and authorization middlewares",
+  "main": "./src/index.js",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Enkel-Digital/create-express-auth-middleware.git"
+  },
+  "keywords": [
+    "Express",
+    "auth",
+    "authentication",
+    "authorization",
+    "middleware",
+    "functional",
+    "factory"
+  ],
+  "bugs": {
+    "url": "https://github.com/Enkel-Digital/create-express-auth-middleware/issues"
+  },
+  "homepage": "https://github.com/Enkel-Digital/create-express-auth-middleware#readme",
+  "author": "JJ",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^4.17.13"
+  }
+}
