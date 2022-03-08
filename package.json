@@ -1,12 +1,16 @@
 {
   "name": "create-express-auth-middleware",
-  "version": "0.1.0",
-  "types": "src/index.d.ts",
-  "files": [
-    "src"
-  ],
   "description": "Library to create Express JS authentication and authorization middlewares",
-  "main": "./src/index.js",
+  "version": "0.2.0",
+  "main": "./dist/index.js",
+  "types": "./dist",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npx tsc",
+    "build:watch": "npx tsc -w"
+  },
   "engines": {
     "node": ">=16.0.0"
   },
@@ -30,6 +34,7 @@
   "author": "JJ",
   "license": "MIT",
   "devDependencies": {
-    "@types/express": "^4.17.13"
+    "@types/express": "^4.17.13",
+    "typescript": "^4.6.2"
   }
 }
