@@ -32,8 +32,15 @@ View [samples](./samples) folder for more specific examples
         "/data/:userID",
 
         // Add authorization middleware to ensure users can only access their own data
+        // Uses an imaginary decodeJWT function
         // Checks that the specified userID in the URL matches user's own userID value in their token.
         create_authz_middleware((req) => decodeJWT(req.get("Authorization")).userID === req.params.userID),
+
+        // Uses an imaginary rate limiting function
+        // If the function fails, the error object is returned,
+        // The object can contain 'status' to override the error status code,
+        // and can have a 'error' string to override the default error message
+        create_authz_middleware((req) => isNotRateLimited(req) || { status: 429, error: "Too many requests" }),
 
         // This request handler will only run if both predicate above returns true!
         (req, res) => res.status(200).json({ data: "Protected user data" })
@@ -42,19 +49,15 @@ View [samples](./samples) folder for more specific examples
 
 3.  If authentication failed, you get a 401 code with the following response by default
     ```json
-    {
-        "ok": false,
-        "error": "Authentication Failed"
-    }
+    { "ok": false, "error": "Authentication Failed" }
     ```
 
 4.  If authorization failed, you get a 403 code with the following response by default
     ```json
-    {
-        "ok": false,
-        "error": "Authorization Failed"
-    }
+    { "ok": false, "error": "Authorization Failed" }
     ```
+
+The only difference between authentication middlewares and authorization middlewares is their error HTTP status codes and their default error responses as shown above.
 
 
 ## Using with Auth providers

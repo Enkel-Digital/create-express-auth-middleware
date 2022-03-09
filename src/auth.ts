@@ -89,8 +89,8 @@ export const create_factory =
           ? next()
           : authFailed(
               res,
-              authFailedStatus,
-              defaultErrorMsg,
+              result?.status || authFailedStatus,
+              result?.error || defaultErrorMsg,
               errorJSON,
               errorHandler
             )
