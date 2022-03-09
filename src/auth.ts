@@ -16,7 +16,19 @@ function authFailed(
   res.status(status).json(resObj);
 
   // Run user's custom error handler if any
-  if (errorHandler) errorHandler(resObj);
+  if (errorHandler)
+    // STUPIDLY EXTRA WRAPPER code to ensure that if errorHandler throws an error, it will be caught and logged
+    // The extra stuff is to accommodate for the fact that errorHandler can be either sync or async
+    //
+    // Alternative for no-op on errors
+    // try {
+    //   Promise.resolve(errorHandler(resObj)).catch(() => {});
+    // } catch {}
+    try {
+      Promise.resolve(errorHandler(resObj)).catch(console.error);
+    } catch (e) {
+      console.error(e);
+    }
 }
 
 /**
