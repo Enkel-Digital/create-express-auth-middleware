@@ -16,13 +16,13 @@ View [samples](./samples) folder for more specific examples
     Authorization: Bearer <your-client-token>
     ```
 
-2. If an API call is made with a valid token, you can access the decoded token object from request
+2. Create Express app with predicate based authentication and authorization middlewares
     ```js
     const app = require("express")();
     const { create_authn_middleware, create_authz_middleware } = require("create-express-auth-middleware");
 
     // Make all routes in this express app to be authentication protected.
-    // Meaning all routes defined later can only be called if a valid JWT is provided.
+    // Meaning all routes defined later can only be called if the request passes this predicate function
     // This DOES NOT mean that routes are fully protected yet,
     // as you need to ensure users have sufficient permission to access APIs using authorization middleware.
     app.use(create_authn_middleware((req) => req.get("Authorization") === "some_JWT_Value"));
@@ -64,7 +64,7 @@ The only difference between authentication middlewares and authorization middlew
 Instead of building your own authentication and authorization backend, you can use auth providers like Firebase Auth, Okta, Auth0 to provide auth services and just use this library to create authentication and authorization middlewares built on top of their API.
 
 Integrations available
-- [Firebase Auth](https://github.com/Enkel-Digital/firebase-auth-express-middleware/)
+- [Firebase Auth](https://github.com/Enkel-Digital/firebase-authentication)
 
 
 ## License and Author
