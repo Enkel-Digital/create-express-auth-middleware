@@ -43,7 +43,10 @@ function authFailed(
  * @returns Factory functions to create express RequestHandler middlewares
  */
 export const create_factory =
-  (defaultErrorMsg: string, authFailedStatus: number) =>
+  <DefaultRequestType extends Request = Request>(
+    defaultErrorMsg: string,
+    authFailedStatus: number
+  ) =>
   /**
    * Factory function to create an auth middleware
    *
@@ -55,7 +58,7 @@ export const create_factory =
    * @param options.errorHandler Custom error handler to deal with every auth failure, e.g. log to APM service
    * @returns An express RequestHandler middleware function
    */
-  <CustomRequestType extends Request = Request>(
+  <CustomRequestType extends Request = DefaultRequestType>(
     // Use generics to let caller insert a different Request type that extends on the original express.Request type
     // E.g. Useful for when user wants to attach a JWT or something to the request object and still have it typed correctly
     predicate: (req: CustomRequestType) => any,
