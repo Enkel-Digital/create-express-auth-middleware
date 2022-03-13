@@ -47,6 +47,7 @@ export const create_factory =
   /**
    * Factory function to create an auth middleware
    *
+   * @template CustomRequestType Type variable to extend express.Request passed to predicate function
    * @param predicate User provided predicate used to check if user is authenticated or authorized
    * @param options Entirely optional parameters to override default values, generally unused
    * @param options.errorJSON A default JSON response for all error JSON responses spread in. E.g. Useful if you want a failed auth response to be { success:false } instead of the default { ok:false }
@@ -54,8 +55,10 @@ export const create_factory =
    * @param options.errorHandler Custom error handler to deal with every auth failure, e.g. log to APM service
    * @returns An express RequestHandler middleware function
    */
-  (
-    predicate: (req: Request) => any,
+  <CustomRequestType extends Request = Request>(
+    // Use generics to let caller insert a different Request type that extends on the original express.Request type
+    // E.g. Useful for when user wants to attach a JWT or something to the request object and still have it typed correctly
+    predicate: (req: CustomRequestType) => any,
 
     {
       errorJSON = { ok: false },
@@ -83,7 +86,7 @@ export const create_factory =
    * If an error is thrown, generate error message first before passing in the returned string.
    */
   async (req, res, next) =>
-    Promise.resolve(predicate(req))
+    Promise.resolve(predicate(req as CustomRequestType))
       .then((result) =>
         result === true
           ? next()
