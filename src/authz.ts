@@ -13,7 +13,4 @@ import { create_factory } from "./auth";
  * so the server is refusing to give the requested resource.
  * Unlike 401 Unauthorized, the client's identity is known to the server.
  */
-export const create_authz_middleware = create_factory(
-  "Authorization Failed",
-  403
-);
+export const create_authz_mw = create_factory("Authorization Failed", 403);

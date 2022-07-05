@@ -7,7 +7,4 @@ import { create_factory } from "./auth";
  * Although the HTTP standard specifies "unauthorized", semantically this response means "unauthenticated".
  * That is, the client must authenticate itself to get the requested response.
  */
-export const create_authn_middleware = create_factory(
-  "Authentication Failed",
-  401
-);
+export const create_authn_mw = create_factory("Authentication Failed", 401);
