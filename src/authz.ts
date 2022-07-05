@@ -15,5 +15,5 @@ import { create_factory } from "./auth";
  */
 export const create_authz_middleware = create_factory(
   "Authorization Failed",
-  401
+  403
 );
