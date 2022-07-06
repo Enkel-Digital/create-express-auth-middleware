@@ -44,8 +44,10 @@ function authFailed(
  */
 export const create_factory =
   <DefaultRequestType extends Request = Request>(
-    defaultErrorMsg: string,
-    authFailedStatus: number
+    // The default error message is Auth Failed instead of Authn or Authz as it could be either
+    defaultErrorMsg: string = "Auth Failed",
+    // The default status code is 400 to indicate client error rather than 401 or 403
+    authFailedStatus: number = 400
   ) =>
   /**
    * Factory function to create an auth middleware
