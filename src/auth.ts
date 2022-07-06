@@ -1,6 +1,20 @@
 import type { Request, Response, RequestHandler } from "express";
 
 /**
+ * Namespace and interface declared in global scope for plugins/users to override,
+ * so that they can properly type their API request objects.
+ */
+declare global {
+  export namespace ExpressAuthMiddleware {
+    /**
+     * Empty interface that extends Request, for users to extend this again through
+     * TS declaration merging, without having to modify the Request type directly.
+     */
+    export interface DefaultRequestType extends Request {}
+  }
+}
+
+/**
  * Create function used to end request in this middleware and call error handler if any
  */
 function authFailed(
@@ -43,7 +57,9 @@ function authFailed(
  * @returns Factory functions to create express RequestHandler middlewares
  */
 export const create_factory =
-  <DefaultRequestType extends Request = Request>(
+  <
+    DefaultRequestType extends Request = ExpressAuthMiddleware.DefaultRequestType
+  >(
     // The default error message is Auth Failed instead of Authn or Authz as it could be either
     defaultErrorMsg: string = "Auth Failed",
     // The default status code is 400 to indicate client error rather than 401 or 403
